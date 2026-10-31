@@ -1,23 +1,53 @@
 
-name: FM-1 Build Check
+name: FM-1 Firmware Build
 
 on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
 
     steps:
-      - name: Download repository
+      - name: Checkout SLOOP
         uses: actions/checkout@v4
 
-      - name: Verify source files
+      - name: Install build dependencies
         run: |
-          test -f build.sh
-          test -f BUILDING.md
-          test -f tests/run_tests.sh
+          sudo apt-get update
+          sudo apt-get install -y \
+            git curl xz-utils python3 python3-pip \
+            python3-pil
 
-      - name: Run SLOOP tests
+      - name: Install JieLi toolchain
         run: |
-          bash tests/run_tests.sh
+          sh tools/get_toolchain.sh
+          test -x "$HOME/.jieli/toolchain/pi32v2/bin/clang"
+
+      - name: Download AC79 SDK
+        run: |
+          git clone --depth 1 \
+            --branch AC79NN_SDK_V1.2.1_2023-12-13 \
+            https://gitee.com/Jieli-Tech/fw-AC79_AIoT_SDK.git \
+            "$HOME/fw-AC79_AIoT_SDK"
+
+      - name: Verify SDK files
+        run: |
+          SDK="$HOME/fw-AC79_AIoT_SDK"
+          test -f "$SDK/cpu/wl82/tools/uboot.boot"
+          find "$SDK" -name cfg_tool.bin
+          find "$SDK" -name eq_cfg_hw.bin
+
+      - name: Compile FM-1 firmware
+        run: |
+          sh build.sh
+
+      - name: Upload build output
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fm1-sloop-build
+          path: |
+            **/*.fwsc
+            **/*.bin
+          if-no-files-found: error
