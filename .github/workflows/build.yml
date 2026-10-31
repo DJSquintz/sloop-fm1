@@ -41,6 +41,10 @@ jobs:
       - name: Compile FM-1 firmware
         run: |
           sh build.sh
+          
+      - name: Run SLOOP tests
+        run: |
+          bash tests/run_tests.sh
 
       - name: Upload build output
         if: success()
