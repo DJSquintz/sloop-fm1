@@ -1,0 +1,18 @@
+
+name: FM-1 Build Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Verify SLOOP source files
+        run: |
+          test -f build.sh
+          test -f BUILDING.md
+          echo "SLOOP source files found successfully!"
