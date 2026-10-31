@@ -5,14 +5,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  check:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Download repository
         uses: actions/checkout@v4
 
-      - name: Verify SLOOP source files
+      - name: Verify source files
         run: |
           test -f build.sh
           test -f BUILDING.md
-          echo "SLOOP source files found successfully!"
+          test -f tests/run_tests.sh
+
+      - name: Run SLOOP tests
+        run: |
+          bash tests/run_tests.sh
