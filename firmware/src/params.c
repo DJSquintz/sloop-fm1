@@ -394,10 +394,10 @@ typedef struct {
 } page_t;
 
 static const page_t PAGES[] = {
-    {"BEGINNER", FAM_ENV, SC_TRACK, GR_NONE, {P_TFLT, P_ATK, P_LD_FLT, P_REV}},
     {"ENV", FAM_ENV, SC_TRACK, GR_ADSR, {P_ATK, P_DEC, P_SUS, P_REL}},
     {"ENV DEST", FAM_ENV, SC_TRACK, GR_NONE, {P_ED_FLT, P_ED_PIT, P_ED_SHP, P_ESYNC}},   /* (P_ED_FX: the level trim, no
                                                                        * page); 2.6: ESYNC, ENV's times as note values */
+    {"BEGINNER", FAM_ENV, SC_TRACK, GR_NONE, {P_TFLT, P_ATK, P_LD_FLT, P_REV}},
     {"LFO", FAM_LFO, SC_TRACK, GR_LFO, {P_LRATE, P_LWAVE, P_LPHASE, P_LFADE}},
     {"LFO 2", FAM_LFO, SC_TRACK, GR_LFO, {P_LSYNC, P_LTRIG, P_LPOL, 0xFF}},   /* 2.6 (Felucca 1.4): SYNC TRIG POL */
     {"LFO DEST", FAM_LFO, SC_TRACK, GR_NONE, {P_LD_PIT, P_LD_FLT, P_LD_SHP, P_LD_AMP}},
@@ -478,7 +478,7 @@ static const param_desc_t *page_desc(const page_t *pg, uint32_t slot, int16_t **
         return &GP[id];
     }
     *valp = &TSEL->p[id];
-    if (pg == &PAGES[0]) {
+    if (pg->title[0] == 'B' && pg->title[1] == 'E' && pg->title[2] == 'G') {
         static param_desc_t beginner_desc[4];
         static const char *const beginner_names[4] = {"TONE", "SHAPE", "MOTION", "SPACE"};
         beginner_desc[slot] = *track_desc(TSEL, id);
