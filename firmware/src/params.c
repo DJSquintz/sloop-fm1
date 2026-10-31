@@ -394,6 +394,7 @@ typedef struct {
 } page_t;
 
 static const page_t PAGES[] = {
+    {"BEGINNER", FAM_ENV, SC_TRACK, GR_NONE, {P_E4, P_ATK, P_LD_FLT, P_REV}},
     {"ENV", FAM_ENV, SC_TRACK, GR_ADSR, {P_ATK, P_DEC, P_SUS, P_REL}},
     {"ENV DEST", FAM_ENV, SC_TRACK, GR_NONE, {P_ED_FLT, P_ED_PIT, P_ED_SHP, P_ESYNC}},   /* (P_ED_FX: the level trim, no
                                                                        * page); 2.6: ESYNC, ENV's times as note values */
